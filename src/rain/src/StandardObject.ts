@@ -2,32 +2,20 @@ import Position from './Position';
 import EventData from './interfaces/EventData';
 import RainImage from './RainImage';
 import { moveTypes } from './types/Types';
+import moveOptions from './interfaces/MoveOptions';
+import { gradullyMoveActions } from './movement/movement';
+import RainObject from './interfaces/RainObject';
+import { StandarObjectOptions } from './interfaces/StandarObjectOptions';
 
-interface moveOptions {
-    type: string;
-    position: Position,
-    transitionMode?: string;
-    distance?: number;
-    angle?: number;
-    duration?: number;
-}
-
-export interface StandarObjectOptions {
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-    material?: RainImage,
-}
-
-export class StandardObject {
+export class StandardObject implements RainObject{
     _position_: Position;
     material?: RainImage;
     width: number;
     height: number;
     readonly center: Position;
     position: Position;
-    private userData: Object = {};
+    userData: Object = {};
+    type: string = "StandardObject";
     constructor({ x, y, width, height, material }: StandarObjectOptions) {
         let me = this;
         this._position_ = new Position(x, y);
@@ -51,15 +39,15 @@ export class StandardObject {
         }
     }
 
-    render(ctx: CanvasRenderingContext2D) {
+    render(ctx: CanvasRenderingContext2D,renderTarget:StandardObject) {
         if (this.material) {
             ctx.drawImage(this.material.image, this.position.x, this.position.y, this.width, this.height);
         }
     }
     onClick(e: EventData) {
-        console.log(this);
+        console.log(e);
     }
-    moveTo(options: moveOptions) {
+    moveTo(options: moveOptions) {     
         switch (options.type) {
             case moveTypes.NORMAL:
                 if (options.position) {
@@ -67,18 +55,9 @@ export class StandardObject {
                 }
                 break;
             case moveTypes.GRADULLY:
-                if (options.position && options.duration) {
-                    // this.position = options.position;
-                    let times = options.duration * 60, nowTime = 0;
-                    let verticeX = (options.position.x - this.position.x) / times;
-                    let verticeY = (options.position.y - this.position.y) / times;
-                    let timer = setInterval(() => {
-                        this.position.x += verticeX;
-                        this.position.y += verticeY;
-                        nowTime++;
-                        if (nowTime >= times) clearInterval(timer);
-                    }, options.duration / times)
-                }else{
+                if (options.position && options.duration) { 
+                    gradullyMoveActions(options, this);
+                } else {
                     throw new Error('Mobile mode: transition, need to set the transition time---duration')
                 }
                 break;

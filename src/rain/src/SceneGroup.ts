@@ -6,6 +6,7 @@ class SceneGroup extends StandardObject{
     rank:number=0;
     constructor(){
         super({x:0,y:0,width:0,height:0});
+        this.type="SceneGroup";
     }
     add(newObj: StandardObject) {
         let item = {

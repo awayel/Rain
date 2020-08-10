@@ -8,3 +8,7 @@ export enum touchTypes {
     RANGE = "range",
     PIXEL = "pixel"
 }
+
+export enum MouseActions {
+    Click = 'click'
+}

@@ -4,7 +4,6 @@ import Size from '../Size';
 import { StandardObject } from '../StandardObject';
 import SceneGroup from '../SceneGroup';
 export function rageTouchDetermination(e: MouseEvent, renderer: Renderer, scene: Scene) {
-    // console.log("area test");
     let aimx = e.offsetX * renderer.devicePixelRatio;
     let aimy = e.offsetY * renderer.devicePixelRatio;
     let list = scene.children;
@@ -15,6 +14,10 @@ export function rageTouchDetermination(e: MouseEvent, renderer: Renderer, scene:
             for (let i = item.children.length - 1; i >= 0; i--) {
                 const child = item.children[i].target;
                 let { x, y } = child._position_;
+                let xg = item.position.x;
+                let yg = item.position.y;
+                x = x + xg;
+                y = y + yg;
                 let { width, height } = child;
                 let min_x = x;
                 let max_x = x + width;
@@ -22,7 +25,7 @@ export function rageTouchDetermination(e: MouseEvent, renderer: Renderer, scene:
                 let max_y = y + height;
                 if (aimx > min_x && aimx < max_x && aimy > min_y && aimy < max_y) {
                     let eventData: EventData = {
-                        target: item,
+                        target: child,
                         rank: list[i].rank,
                         scene: scene,
                         sceneGroup: item,
@@ -67,7 +70,6 @@ function createCav(size: Size) {
 }
 
 export function pixelTouchDetermination(e: MouseEvent, renderer: Renderer, scene: Scene) {
-    // console.log("pixel test");
     let backUp = createCav(renderer.getSize());   // a canvas to compare
     let aimx = e.offsetX * renderer.devicePixelRatio;
     let aimy = e.offsetY * renderer.devicePixelRatio;
@@ -80,7 +82,7 @@ export function pixelTouchDetermination(e: MouseEvent, renderer: Renderer, scene
             if (item instanceof SceneGroup) {
                 for (let i = item.children.length - 1; i >= 0; i--) {
                     const child = item.children[i].target;
-                    child.render(backUp.ctx);
+                    child.render(backUp.ctx, item);
                     let comparePoint = backUp.ctx.getImageData(aimx, aimy, 1, 1)
                     backUp.ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);  //clean canvas
                     if (comparePoint.data[3] !== 0) {
@@ -97,7 +99,7 @@ export function pixelTouchDetermination(e: MouseEvent, renderer: Renderer, scene
 
                 }
             } else if (item instanceof StandardObject) {
-                item.render(backUp.ctx);
+                item.render(backUp.ctx, item);
                 let comparePoint = backUp.ctx.getImageData(aimx, aimy, 1, 1)
                 backUp.ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);  //clean canvas
                 if (comparePoint.data[3] !== 0) {
@@ -118,4 +120,3 @@ export function pixelTouchDetermination(e: MouseEvent, renderer: Renderer, scene
         return { res: false }
     }
 }
-

@@ -44,10 +44,10 @@ export class Renderer {
                 element.target.children = element.target.children.sort((a,b)=>a.groupRank-b.groupRank);
                 for (let index2 = 0; index2 < element.target.children.length; index2++) {
                     const childElement = element.target.children[index2];
-                    childElement.target.render(ctx);
+                    childElement.target.render(ctx,element.target);
                 }
             }else if (element.target instanceof StandardObject) {
-                element.target.render(ctx);
+                element.target.render(ctx,element.target);
             }
         }
     }
@@ -83,7 +83,7 @@ export class Scene {
         let scene = this;
         switch (type) {
             case MouseActions.Click:
-                addClickEvent(type, renderer, touchType, scene);
+                addClickEvent(renderer, touchType, scene);
                 return;
         }
     }

@@ -8,15 +8,15 @@ function main() {
     let renderer = new Rain.Renderer(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
     let scene = new Rain.Scene();
-    let myCard = new Rain.Card({ x: 10, y: 10, height: 200, width: 150, text: "1", borderRadius: 10, borderColor: "#0aa1ed" });
+    let myCard = new Rain.Card({ x: 10, y: 10, height: 200, width: 150, text: "1", borderRadius: 10, borderColor: "#0aa1ed",border:true });
     scene.add(myCard);
-    let myCard2 = new Rain.Card({ x: 45, y: 10, height: 200, width: 150, text: "2", borderRadius: 10 });
+    let myCard2 = new Rain.Card({ x: 45, y: 10, height: 200, width: 150, text: "2", borderRadius: 10,border:true });
     scene.add(myCard2);
-    let myCard3 = new Rain.Card({ x: 80, y: 10, height: 200, width: 150, text: "3", borderRadius: 10 });
+    let myCard3 = new Rain.Card({ x: 80, y: 10, height: 200, width: 150, text: "3", borderRadius: 10 ,border:true});
     scene.add(myCard3);
-    let myCard4 = new Rain.Card({ x: 115, y: 10, height: 200, width: 150, text: "4", borderRadius: 10 });
+    let myCard4 = new Rain.Card({ x: 115, y: 10, height: 200, width: 150, text: "4", borderRadius: 10,border:true });
     scene.add(myCard4);
-    let myCard5 = new Rain.Card({ x: 150, y: 10, height: 200, width: 150, text: "5", borderRadius: 10 });
+    let myCard5 = new Rain.Card({ x: 150, y: 10, height: 200, width: 150, text: "5", borderRadius: 10 ,border:true});
     scene.add(myCard5);
     let myCard6 = new Rain.Card({
         x: 185,
@@ -31,7 +31,8 @@ function main() {
             height:400,
         }),
         text: "K",
-        borderRadius: 10
+        borderRadius: 10,
+        border:true
     });
     scene.add(myCard6);
     let myCard7 = new Rain.Card({
@@ -47,7 +48,8 @@ function main() {
             height:400,
         }),
         text: "Q",
-        borderRadius: 10
+        borderRadius: 10,
+        border:true
     });
     scene.add(myCard7);
     let cardGroup = new SceneGroup();
@@ -64,7 +66,8 @@ function main() {
             height:400,
         }),
         text: "Q",
-        borderRadius: 10
+        borderRadius: 10,
+        border:true
     });
     let myCard9 = new Rain.Card({
         x: 290,
@@ -79,11 +82,22 @@ function main() {
             height:400,
         }),
         text: "K",
-        borderRadius: 10
+        borderRadius: 10,
+        border:true
     });
     cardGroup.add(myCard8);
     cardGroup.add(myCard9);
     scene.add(cardGroup);
+
+    cardGroup.onClick=function(e){
+        if(e.sceneGroup){
+            e.sceneGroup.moveTo({
+                type:moveTypes.GRADULLY,
+                duration:.5,
+                position:new Position(Math.random() *100, Math.random() * 100)
+            })
+        }
+    }
 
     Rain.Card.prototype.onClick = function (e) {
         // e.scene.children[e.rank].rank = scene.children.length;
@@ -95,7 +109,7 @@ function main() {
         // move the target 
         e.target.moveTo({
             type: moveTypes.GRADULLY,
-            duration:10,
+            duration:.5,
             position: new Position(Math.random() * 500, Math.random() * 500)
         });
     }
